@@ -1,6 +1,4 @@
-
 library(readr)
-basicTrendline
 donnee <- read.csv("donnee.csv", header = TRUE, sep = ",", dec = ".")
 
 g = donnee$Grandeur
@@ -14,7 +12,7 @@ buts = donnee$Nombre.de.buts
 # layout(matrix(1:2,1,2)) # ceci permet de diviser la sortie graphique en 2
 
 # Grandeur (maxime) -> but
-plot(g, buts,main = "Nombre de buts en fonction de la grandeur", xlab = "Taille (en pouce)", ylab = "Nombre de buts")
+plot(g, buts,main = "Nombre de buts en fonction de la grandeur", xlab = "Taille (en pouces)", ylab = "Nombre de buts")
 fit <- glm(buts~g)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
@@ -26,20 +24,20 @@ co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
 # Age -> but
-plot(a, buts,main = "Nombre de buts en fonction de l'âge", xlab = "Age (en annee)", ylab = "Nombre de buts")
+plot(a, buts,main = "Nombre de buts en fonction de l'âge", xlab = "Âge (en années)", ylab = "Nombre de buts")
 fit <- glm(buts~a)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
 # Nombre tirs -> but
-plot(nbTirs, buts,main = "Nombre de buts en fonction du nombres de tirs", xlab = "Nombre de tirs", ylab = "Nombre de buts")
+plot(nbTirs, buts,main = "Nombre de buts en fonction du nombre de tirs", xlab = "Nombre de tirs", ylab = "Nombre de buts")
 fit <- glm(buts~nbTirs)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
 # Temps de glace -> Nb Tirs
-plot(temps, nbTirs,main = "Nombres de tirs en fonction du temps sur la glace", xlab = "Temps sur la glace", ylab = "Nombre de tirs")
-fit <- glm(nbTirs~temps)
+plot(tempsPartie, nbTirs,main = "Nombres de tirs en fonction du temps sur la glace", xlab = "Temps par partie (en minutes)", ylab = "Nombre de tirs")
+fit <- glm(nbTirs~tempsPartie)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
@@ -55,6 +53,7 @@ fisher.test(buts, p, simulate.p.value = TRUE)           # p > 0.05
 fisher.test(buts, a, simulate.p.value = TRUE)           # p > 0.05
 fisher.test(buts, nbTirs, simulate.p.value = TRUE)      # p < 0.05 - On rejette H0, les valeurs ne sont pas indépendantes
 fisher.test(buts, tempsPartie, simulate.p.value = TRUE) # p < 0.05 - On rejette H0
+fisher.test(temps, nbTirs, simulate.p.value = TRUE) # p < 0.05 - On rejette H0
 
 
 # Tests Khi-deux - Fonctionne pas pcq les valeurs estimées sont trop petites
@@ -69,3 +68,5 @@ chisq.test(buts, a)
 chisq.test(buts, nbTirs)
 chisq.test(buts, temps)
 
+anova(lm(buts~nbTirs))
+anova(lm(buts~g), )
