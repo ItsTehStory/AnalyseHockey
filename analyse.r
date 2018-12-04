@@ -119,3 +119,27 @@ res = residuals(lm5)
 plot(lm5,main = "Graphique des résidus pour les buts et le temps sur la glace",sub.caption = "Temps (en secondes)", na.action = na.exclude) 
 abline(0, 0)
 
+
+# Intervalles de confiance
+# ===================================================================
+n = length(buts)
+
+# Changer ces variables pour trouver les autres intervalles
+var(nbTirs)
+sd = sd(nbTirs)
+x_bar = mean(nbTirs)
+
+# Moyennes
+margin_error = qnorm(.95) * (sd / sqrt(n))
+L = x_bar - margin_error
+U = x_bar + margin_error
+
+x_bar
+L
+U
+
+# Variances
+sd
+sd/(1 + qnorm(.95)/(2*sqrt(n))) # L 
+sd/(1 - qnorm(.95)/(2*sqrt(n))) # U
+
