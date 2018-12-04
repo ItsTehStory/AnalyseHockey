@@ -3,10 +3,10 @@ donnee <- read.csv("donnee.csv", header = TRUE, sep = ",", dec = ".")
 
 g = donnee$Grandeur
 p = donnee$Poids
-a = donnee$Âge
+a = donnee$Age
 nbTirs = donnee$Nombre.de.tirs
 temps = donnee$Temps.sur.la.glace
-tempsPartie = donnee$Temps.Partie.jouées
+tempsPartie = donnee$Temps.Partie.jouees
 buts = donnee$Nombre.de.buts
 
 
