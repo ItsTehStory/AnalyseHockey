@@ -9,7 +9,6 @@ temps = donnee$Temps.sur.la.glace
 tempsPartie = donnee$Temps.Partie.jouées
 buts = donnee$Nombre.de.buts
 
-# layout(matrix(1:2,1,2)) # ceci permet de diviser la sortie graphique en 2
 
 # Grandeur (maxime) -> but
 plot(g, buts,main = "Nombre de buts en fonction de la grandeur", xlab = "Taille (en pouces)", ylab = "Nombre de buts")
@@ -18,7 +17,7 @@ co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
 # Poid -> but
-plot(p, buts,main = "Nombre de buts en fonction du poid", xlab = "Poid (en livres)", ylab = "Nombre de buts")
+plot(p, buts,main = "Nombre de buts en fonction du poids", xlab = "Poid (en livres)", ylab = "Nombre de buts")
 fit <- glm(buts~p)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
@@ -36,11 +35,17 @@ co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
 # Temps de glace -> Nb Tirs
-plot(tempsPartie, nbTirs,main = "Nombres de tirs en fonction du temps sur la glace", xlab = "Temps par partie (en minutes)", ylab = "Nombre de tirs")
-fit <- glm(nbTirs~tempsPartie)
+plot(temps, buts, main = "Nombres de buts en fonction du temps sur la glace", xlab = "Temps joué (secondes)", ylab = "Nombre de buts")
+fit <- glm(buts~temps)
 co <- coef(fit)
 abline(fit, col="blue", lwd=2)
 
+summary(lm(buts~g))
+summary(lm(buts~p))
+coef(summary(lm(buts~p)))[, "Std. Error"] 
+summary(lm(buts~a))
+summary(lm(buts~nbTirs))
+summary(lm(buts~temps))
  
 # Tests Fisher - Ces tests fonctionnent pour trouver nos valeurs p, 
 # mais les valeurs changent à chaque fois vu qu'on simule quelques données
@@ -56,17 +61,61 @@ fisher.test(buts, tempsPartie, simulate.p.value = TRUE) # p < 0.05 - On rejette 
 fisher.test(temps, nbTirs, simulate.p.value = TRUE) # p < 0.05 - On rejette H0
 
 
-# Tests Khi-deux - Fonctionne pas pcq les valeurs estimées sont trop petites
-# Il faudrait trouver un moyen pour regrouper des valeurs en blocs de "range"
-# pour donner des valeurs estimées >= 5. J'ai gosser longtemps et j'ai pas trouvé comment faire.
-# Je pense qu'on pourrait utiliser les résultats fisher en haut à place.
-# ===================================================================
-chisq.test(buts, g)
-chisq.test(buts, p)
-chisq.test(buts, a)
-
-chisq.test(buts, nbTirs)
-chisq.test(buts, temps)
-
 anova(lm(buts~nbTirs))
-anova(lm(buts~g), )
+anova(lm(buts~g))
+
+m1.lm <- lm(buts~nbTirs)
+m1.res = resid(m1.lm)
+m1.res
+plot(m1.res,main = "Graphique des résidus pour les buts et le nombre de tirs", xlab = "Variable", ylab = "Résidus") 
+abline(0, 0)  
+
+m2.lm <- lm(buts~a)
+m2.res = resid(m2.lm)     
+plot(m2.res,main = "Graphique des résidus pour les buts et l'âge", xlab = "Variable", ylab = "Résidus") 
+abline(0, 0)
+
+m3.lm <- lm(buts~temps)
+m3.res = resid(m3.lm)
+plot(m3.res,main = "Graphique des résidus pour les buts et le temps de glace", xlab = "Variable", ylab = "Résidus") 
+abline(0, 0)
+
+m4.lm <- lm(buts~g)
+m4.res = resid(m4.lm)
+# m4.res
+plot(m4.res,main = "Graphique des résidus pour les buts et la grandeur", xlab = "Variable", ylab = "Résidus") 
+abline(0, 0)
+
+m5.lm <- lm(buts~p)
+m5.res = resid(m5.lm)     
+plot(m5.res,main = "Graphique des résidus pour les buts et le poids", xlab = "Variable", ylab = "Résidus") 
+abline(0, 0)
+
+###############################
+###############################
+
+lm1 <- lm(nbTirs~buts)
+res = residuals(lm1)
+plot(lm1,main = "Graphique des résidus pour les buts et le nombre de tirs",sub.caption = "Nombre de tirs") 
+abline(0, 0)
+
+lm2 <- lm(g~buts, na.action = "na.exclude")
+res = residuals(lm2)
+plot(lm2,main = "Graphique des résidus pour les buts et la taille",sub.caption = "Taille (en pouces)") 
+abline(0, 0) 
+
+lm3 <- lm(p~buts)
+res = residuals(lm3)
+plot(lm3,main = "Graphique des résidus pour les buts et le poids",sub.caption = "Poids (en livres)") 
+abline(0, 0)
+
+lm4 <- lm(a~buts)
+res = residuals(lm4)
+plot(lm4,main = "Graphique des résidus pour les buts et l'âge",sub.caption = "Âge (en année)") 
+abline(0, 0)
+
+lm5 <- lm(temps~buts)
+res = residuals(lm5)
+plot(lm5,main = "Graphique des résidus pour les buts et le temps sur la glace",sub.caption = "Temps (en secondes)", na.action = na.exclude) 
+abline(0, 0)
+
